@@ -5,14 +5,19 @@ const pokeballSchema = new Schema({
   name: { type: String, unique: true },
   stock: { type: Number, default: 0 },
 })
+pokeballSchema.index({ name: 'text' })
 
 pokeballSchema.methods.increase = function() {
-  return this.update({ stock: this.stock + 1 })
+  this.stock++
+  return Pokeball.findByIdAndUpdate(this._id, { stock: this.stock })
 }
 
 pokeballSchema.methods.decrease = function() {
-  const newStock = this.stock === 0 ? 0 : this.stock - 1
-  return this.update({ stock: newStock })
+  if (this.stock === 0) {
+    return
+  }
+  this.stock--
+  return Pokeball.findByIdAndUpdate(this._id, { stock: this.stock })
 }
 
 pokeballSchema.methods.delete = function() {

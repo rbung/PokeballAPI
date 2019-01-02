@@ -1,7 +1,11 @@
 const chalk = require('chalk')
 const mongoose = require('mongoose')
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pokeball')
+mongoose.connect(
+  process.env.MONGODB_URI || 'mongodb://localhost/pokeball',
+  { useNewUrlParser: true },
+)
+mongoose.set('useCreateIndex', true)
 
 const db = mongoose.connection
 db.on('error', () => {
